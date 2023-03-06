@@ -1,0 +1,80 @@
+package chanpter3.A_ClassObject;
+
+
+// class
+// 객체를 정의해 놓은 것
+// 객체를 생성하는 기반
+// 객체를 정의하는 틀 또는 설계도
+
+// 클래스는 객체의 상태를 나타내는 필드와 객체의 행동을 나타내는 메서드로 구성됨
+// 필드 : 클래스에 포함된 변수 혹은 상수
+// 메서드 : 어떠한 특정 작업을 수행하기 위한 명령문의 집합
+
+// object
+// 실제로 존재하는 모든 것
+// 클래스로 생성된 실체
+
+// 클래스로 생성된 각각의 개체는 독립적으로 존재함
+// 같은 클래스로 생성된 객체라 하더라도 각각이 가지고 있는 '속성 값' 은 다를 수 있다.(보통 다르다)
+
+// 클래스 선언방법
+// class 클래스명 {속성1,속성2,..... 기능1,기능2,.....}
+// 속성 : 변수, 특성, 필드, 상태
+// 기능 : 메서드, 함수, 행위
+
+class SmartPhone{
+	
+	//기종
+	//색상
+	//메모리
+	//전화ㅓㄴ호
+	//전원
+	String modelName;
+	String color;
+	int memory;
+	String telNumber;
+	boolean power;
+	
+	
+	
+	// 기능과 관련된건 함수, 메서드 사용
+	
+	//전화 걸기
+	//영상시청
+	//메세지
+	//전원키고 끄기
+	
+	void call(String toTelNumber) {
+		System.out.println(toTelNumber = " 로 전화를 겁니다");
+	}
+	
+	void showVidio() {
+		System.out.println("영상을 시청합니다");
+	}
+	void sendMessage(String message, String toTelNumber) {
+		System.out.println(toTelNumber+"로 "+message + "를 보냅니다");
+	}
+	
+	void setPower() {
+		power =!power;
+	}
+	
+	
+}
+
+public class ClassObject {
+
+	public static void main(String[] args) {
+
+	SmartPhone myPhone = new SmartPhone();
+		myPhone.modelName="s7";
+		String toTelNumber="01076257625";
+		myPhone.call(toTelNumber);
+	
+		
+	
+	}
+
+
+
+}

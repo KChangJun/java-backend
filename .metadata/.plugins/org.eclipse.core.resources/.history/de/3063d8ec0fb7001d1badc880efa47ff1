@@ -1,0 +1,94 @@
+package example.SignUp;
+
+import java.util.Scanner;
+
+public class SingUp2 {
+	// 입력
+	// 아이디, 패스워드, 패스워드 확인, 이름
+	static String userId= new String(); 
+	static String userPassword= new String();
+	static String userPasswordCheck= new String();
+	static String userName= new String();
+	static String[] idList = {"qwer", "asdf", "zxcv"};
+	
+	
+	
+	
+	public static void main(String[] args) {
+		
+		 // <= 다차원 배열이다. Stirng 자체가 이미 문자 배열 이기 때문에 배열에 배열이기 때문. String의 특이성.
+		
+		
+		
+		
+		
+		
+	
+	// 1. 사용자로부터 아이디, 패스워드, 패스워드 확인, 이름을 입력받음
+		Scanner scanner = new Scanner(System.in);
+	
+		
+		System.out.println("아이디: ");
+		userId = scanner.nextLine();
+		
+		System.out.println("패스워드: ");
+		userPassword = scanner.nextLine();
+		
+		System.out.println("패스워드 확인: ");
+		userPasswordCheck = scanner.nextLine();
+		
+		System.out.println("이름: ");
+		userName = scanner.nextLine();
+		
+		// 2. 모두 입력받았는지 검증
+		
+		// string.isBlank(): 문자열이 비었거나 띄어쓰기만으로 구성됐을 때 
+		// true를 반환하고 아니면 false를 반환
+		
+		if(userId.isBlank()||userPassword.isBlank()||userPasswordCheck.isBlank()||userName.isBlank()) {
+			
+			System.out.println("모두 입력해주세요");
+			return;
+			
+		}
+		
+		// 3. 아이디 중복 체크
+		//for? while?
+		// 3-1 일반 for 문 사용
+		for(int index = 0; index<idList.length; index++) {
+			if(userId.equals(idList[index])) {
+				System.out.println("중복된 아이디가 존재합니다");
+				return;
+			}
+			}
+		
+		// 3-2)foreach문 사용 <= 얘는 내용을 복사해서 사용. 내용물을 직접 변경할 때에는 for문 사용
+		
+		for (String id:idList) {
+			if(userId.equals(id)) {
+				System.out.println("중복된 아이디가 존재합니다");
+				return;
+			}
+	
+	
+	//결과
+			// 성공, 실패(모두 입력하지 않았을 때, 아이디가 중복 될때, 비밀번호가 서로 다를 때
+}
+
+}
+
+//
+public static void idcheck() {
+	for(int index = 0; index<idList.length; index++) {
+		if(userId.equals(idList[index])) {
+			System.out.println("중복된 아이디가 존재합니다");
+			return;
+		}
+		}
+		
+		
+	}
+}
+	
+	
+	
