@@ -87,7 +87,7 @@ public class SingUp {
 		System.out.println("성공");
 	
 //}
-
+//  
 }
 }
 //
