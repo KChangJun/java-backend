@@ -27,7 +27,7 @@ class Developer extends Human{
 	}
 	
 }
-	
+
 
 public class Overriding {
 	

@@ -78,7 +78,7 @@ public class Polymorphism {
 		
 		
 		
-		// 참조변수의 형변환을 한다고 하더라도 인스턴스가 가지고 있는 데이터에는
+		// 참조변수의 형변환을 한다고 하더라도 인스턴스가 가지고 있는 데이터에는 
 		// 아무런 영향을 미치지 않음
 		// 단지 인스턴스의 사용 범위를 조절하는 것
 		
@@ -91,8 +91,7 @@ public class Polymorphism {
 //		SubClass2 sub2=(SubClass2)superClass;
 //		
 		
-		
-		
+
 		
 		
 //		subClass1.number1=5;
@@ -110,3 +109,5 @@ public class Polymorphism {
 	}
 
 }
+//                 
+// 
