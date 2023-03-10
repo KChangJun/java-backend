@@ -1,10 +1,13 @@
 package chapter5.C_DateTime;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
@@ -76,7 +79,6 @@ public class DateTime {
 		// localTime class
 		// 시간을 관리해주는 class
 		LocalTime localTime = LocalTime.now();
-		System.out.println(localTime);
 		LocalTime localTimeOf = LocalTime.of(4, 2, 22);
 		System.out.println(localTimeOf);
 		
@@ -86,6 +88,36 @@ public class DateTime {
 		System.out.println(localDateTime);
 		LocalDateTime localDateTimeOf = LocalDateTime.of(localDateOf, localTimeOf);
 		System.out.println(localDateTimeOf);
+		
+		
+		// 특정 날짜 혹은 시간 가져오기
+		// .getXXX();
+		int year = localDateTime.getYear();
+		int month = localDateTime.getMonthValue();
+		Month enumMonth = localDateTime.getMonth();
+		int dayOfYear = localDateTime.getDayOfYear();
+		System.out.println(dayOfYear); //1월 1일부터 지금 몇일 지났는가
+		int dayOfMonth = localDateTime.getDayOfMonth();
+		DayOfWeek dayOfWeek = localDateTime.getDayOfWeek();
+		System.out.println(dayOfWeek); // 일주일중 무슨 요일인가
+		
+		boolean isLeapTear = localDate.isLeapYear(); //윤년 표시해주는거
+		
+		int hour = localDateTime.getHour(); //현재시간
+		int minute = localDateTime.getMinute();//현재 분
+		int second = localDateTime.getSecond();//현재 초
+		int nano = localDateTime.getNano();//현재 나노초
+		
+		// 특정 날짜 및 시간 변경 (직접 변경, 더하기, 빼기)
+		// 직접 변경 : withXXX(int타입 데이터);
+		// 더하기 - 빼기 : plusXXX(long 타입 데이터), minusXXX(long 타입 데이터);
+		localDateTime = localDateTime.withYear(2012).plusWeeks(4).minusHours(9);
+		localDateTime = localDateTime.withDayOfYear(1).plusMinutes(50).minusNanos(50000);
+		System.out.println(localDateTime.withYear(2012).plusWeeks(4).minusHours(9));// 지금 현재 기준에서 년이 2012로, 4주를 더해서 9시간을 뺸것. 현재 기준!
+		
+		Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();		// 위에서 변경한 시간을 인스턴트화 시키는것
+		Date datetime = Date.from(instant); // 인스턴스화 시킨것을 다시 Date 클래스의 형태로  바꾼것
+		System.out.println(datetime);   
 	}
 
 }
