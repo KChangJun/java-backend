@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import trainReservation.dto.GetTrainListDto;
+import trainReservation.dto.PostReservationDto;
 import trainReservation.entity.Cost;
+import trainReservation.entity.ReservationInfo;
 import trainReservation.entity.Seat;
 import trainReservation.entity.StopStation;
 import trainReservation.entity.Train;
@@ -16,10 +18,12 @@ import trainReservation.entity.Train;
 
 
 
+
 public class ReservationService {
 	
 	private static List<Train> trains= new ArrayList<Train>();
-	private static List<Cost> costs = new ArrayList<Cost>();;
+	private static List<Cost> costs = new ArrayList<Cost>();
+	private static List<ReservationInfo> reservations = new ArrayList<ReservationInfo>();
 	private static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 	public ReservationService() {
 		initData();
@@ -33,13 +37,14 @@ public class ReservationService {
 			int sameStationIndex  = -1;
 			
 			for(int stopStationIndex = 0; stopStationIndex < stopStations.size(); stopStationIndex++) {
+				StopStation stopStation = stopStations.get(stopStationIndex);
 				String stopStationName = stopStations.get(stopStationIndex).getStationName();
 				
 				if(!dto.isEqualDepartureStation(stopStationName)){
 				continue;
 				}
 				
-			LocalTime stationDepartureTime = LocalTime.parse(dto.getDepartureTime(), timeFormatter);
+			LocalTime stationDepartureTime = LocalTime.parse(stopStation.getDepartureTime(), timeFormatter);
 			
 				if(stationDepartureTime.isBefore(departureTime)) {
 				break;  
@@ -98,6 +103,104 @@ public class ReservationService {
 		return possibleTrains;
 		
 	}
+	
+	
+	public ReservationInfo postReservation(PostReservationDto postResrvationdto,GetTrainListDto getTrainListDto){
+		
+		Train train = null;//null 참조 변수일때 값이 지정되지 않은 상태 프로그래밍 언어 기준임. 데이터 베이스는 다름
+	
+		for(Train trainItem:trains) { // for00
+			if(postResrvationdto.isEqualTrainNumber(trainItem.getTrainNumber())) {
+				train= trainItem;
+				break;
+				
+			}
+			
+		}//for00
+		
+		if(train == null) {
+			System.out.println("존재하지 않는 열차입니다.");
+			return null;
+		}
+		boolean desinationsState = true;
+		List<Seat> seats= train.getSeats();
+		List<String> inputSeatNames = postResrvationdto.getSeats();
+		
+		for (int index=0; index <seats.size(); index++) {//for01
+			
+			Seat seat = seats.get(index);
+			
+			for(String seatNumber:inputSeatNames) {//for 02
+				if(!seat.getSeatNumber().equals(seatNumber)) {
+					continue;
+				}
+				if(seat.isSeatStatus()) {
+					desinationsState=false;
+					break;
+				}
+				seat.setSeatStatus(true);
+				break;
+			}//for 02
+			
+			if(!desinationsState) {
+				break;
+			}
+			
+		}//for01
+		if(!desinationsState) {
+			System.out.println("좌석 배정에 실패 했습니다.");
+			return null;
+		}
+		int totalCost = 0;
+		for(Cost cost: costs) {//for03
+			boolean isEqualDepartureStation = getTrainListDto.isEqualDepartureStation(cost.getDepartureStation());
+			boolean isEqualArrivalStation = getTrainListDto.isEqualArrivalStation(cost.getArrivalStaiton());
+			if(!isEqualDepartureStation || !isEqualArrivalStation) {
+				continue;}
+			totalCost = cost.getAmount()*getTrainListDto.getNumberOfPeople();
+			break;
+		}//for 03
+		
+		
+		String departureTime = "";
+		String arrivalTime="";
+		
+		for(StopStation stopStation : train.getStopStaions()) {//for 04
+			boolean isEqualDepartureStation = getTrainListDto.isEqualDepartureStation(stopStation.getStationName());
+			boolean isEqualArrivalStation = getTrainListDto.isEqualArrivalStation(stopStation.getStationName());
+			if(isEqualDepartureStation) {
+				departureTime = stopStation.getDepartureTime();
+			}
+			if(isEqualArrivalStation) {
+				arrivalTime = stopStation.getArrivalTime();
+			}
+		}
+		
+		
+		
+		ReservationInfo reservationInfo = new ReservationInfo(postResrvationdto.getTrainNumber(),
+				postResrvationdto.getSeats(),getTrainListDto.getDepartureStation(),departureTime,
+				getTrainListDto.getArrivalStaion(),arrivalTime,totalCost);
+		
+		reservations.add(reservationInfo);
+		return reservationInfo;
+		
+	}//ReservationInfo
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	private static void initData() {
 		 List<Seat> seats= new ArrayList<Seat>();
 		 List<StopStation> stopStaions = new ArrayList<StopStation>();
