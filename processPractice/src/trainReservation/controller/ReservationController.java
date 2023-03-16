@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import trainReservation.dto.GetReservationDto;
 import trainReservation.dto.GetTrainListDto;
 import trainReservation.dto.PostReservationDto;
 import trainReservation.entity.ReservationInfo;
@@ -21,6 +22,10 @@ public class ReservationController {
 	private static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 	private ReservationService reservationService;
 	
+	private GetReservationDto getReservationDto;
+	private GetTrainListDto getTrainListDto;
+	private PostReservationDto postReservationDto;
+	
 	public ReservationController() {
 		this.reservationService  = new ReservationService();
 	}
@@ -30,7 +35,7 @@ public class ReservationController {
 		
 			
 			//내용 기입하고 기입한 내용 확인 
-			GetTrainListDto getTrainListDto= new GetTrainListDto();
+			getTrainListDto= new GetTrainListDto();
 			
 			LocalTime departureTime = null;
 			if(getTrainListDto.isEmpty()){
@@ -65,19 +70,61 @@ public class ReservationController {
 			List<Train> possibleTrains = reservationService.getPossibleTrainList(getTrainListDto, departureTime);
 		
 			System.out.println(possibleTrains.toString());
-			ReservationInfo reservationInfo = null;
-			while(true) {//while02
 			
-				PostReservationDto postReservationDto = new PostReservationDto(getTrainListDto.getNumberOfPeople());
-				reservationInfo= reservationService.postReservation(postReservationDto, getTrainListDto);
-				if(reservationInfo==null) {
-				continue;
+			postReservation();
+			break;
+			
+			
+		}//while
+
+	} // reservation method 
+	
+	public void postReservation() {
+		
+		while(true) {//while02
+		
+			postReservationDto = new PostReservationDto(getTrainListDto.getNumberOfPeople());
+			ReservationInfo reservationInfo = reservationService.postReservation(postReservationDto, getTrainListDto);
+			if(reservationInfo==null) {
+			continue;
 			}
-				break;
-			}//while02
 			
 			System.out.println(reservationInfo.toString());
-		}//while
-	}
+
+			break;
+		}//while02
+		
+	} // poserReservation method end
 	
-}
+	//----------------------------------------------------------------------------------------------------
+	public void getReservationInfo() {
+		
+		while(true) {
+			getReservationDto = new GetReservationDto();
+			String reservationNumber = getReservationDto.getReservationNumber();
+			if(reservationNumber.isBlank()) {
+				System.out.println("예약 번호를 입력해주세요");
+				continue;
+			}
+			
+			ReservationInfo reservationInfo = reservationService.getReservation(getReservationDto);//reservationInfo 가 null 값이 오게 될수도 있다. 그러므로 예외 처리를 해주어야 한다.
+			if(reservationInfo ==null) {
+				System.out.println("해당 예약번호의 예약정보가 없습니다.");
+				break; // 에외 사항인데 밑의 내용이 출력되면 안되기 때문에 break를 걸어 놓아야한다. 예외상황에서 if 를 쓸때
+			}
+			// String message = (reservationInfo == null ? "해당 예양번호의 예약 정보가 없습니다." : reservationInfo.toString());			
+			// 3항 연산자를 쓰는 경우에는 전자는 오류 후자는 정상반응이기 때문에 같이 쓰는것은 좋지 않다.
+			
+			System.out.println(reservationInfo.toString());
+			break;
+			
+			
+			
+		}//while
+		
+		
+	}//getReservationInfo end
+	//------------------------------------------------------------------------------------------------------
+	
+	
+} //class 종료

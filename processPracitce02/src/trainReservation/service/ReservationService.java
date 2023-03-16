@@ -15,61 +15,62 @@ import trainReservation.entity.Train;
 public class ReservationService {
 	public static List<Train> trains = new ArrayList<>();
 	public static List<Cost> costs = new ArrayList<>();
+	List<Train> possibleTrainList = new ArrayList<>();
 	private static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+	//----------------------------------------------------
 	public ReservationService() {
 		initData();
 		}//ReservationService
+	
+	//---------------------------------------------------------------------------------------------------------------
 	public List<Train> getPossibleTrainList(ReservationDto dto, LocalTime departureTime){
-		List<Train> possibleTrainList = new ArrayList<>();
-		boolean possible01=false;
-		boolean possible02=false;
-		boolean possible03=false;
-		boolean possible04=false;
+
+		
 		
 		
 		for(Train train:trains) {
-			List<StopStation> stopStaions = train.getStopStaions();
+			List<StopStation> stopStations = train.getStopStaions();
+			
+			boolean possible01=false;
+			boolean possible02=false;
+			boolean possible03=false;
+			boolean possible04=false;
+			
+	
+			
 			for(int stopStationIndex=0; stopStationIndex<train.getStopStaions().size(); stopStationIndex++) {
 				StopStation stopStation = stopStations.get(stopStationIndex);
-				
-				
-				
-				
-				
-			}
-				
-				
-			
-			
-			if(dto.getDepartureStation().equals(train.getStopStaions())) {
-				possible01=true;
+				LocalTime stopStationDepartureTime = LocalTime.parse(stopStation.getDepartureTime(),timeFormatter);
+				if(!dto.getDepartureStation().equals(stopStation.getStationName())) {
+					continue;
 				}
-			if(dto.getArrivalStation().equals(train.getStopStaions())) {
-				
-				possible02=true;
-			}
-			
-			
-			if(departureTime.isBefore(departureTime)) {
+				possible01=true;
 				
 				
+				if(departureTime.isBefore(stopStationDepartureTime)) {
+					possible02=true;
+				}
+				
+				if(dto.getArrivalStation().equals(stopStation.getStationName())) {
+					possible03=true;
+				}
+				if(possible01 && possible02 && possible03) {
+					
+					
+				}
+				
+				
 			}
+				
+				
 			
 			
-			}
-		
-		
-		
-		
-		
-		
-		
-		
-		
+			
+			}//for
 		
 		return null;
 	}
-	
+	//------------------------------------------------------------------------------------------------------------
 
 	
 	

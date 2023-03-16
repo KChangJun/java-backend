@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import trainReservation.dto.GetReservationDto;
 import trainReservation.dto.GetTrainListDto;
 import trainReservation.dto.PostReservationDto;
 import trainReservation.entity.Cost;
@@ -17,33 +18,35 @@ import trainReservation.entity.Train;
 // 실제 비지니스 로직을 담당 
 
 
-
-
 public class ReservationService {
 	
 	private static List<Train> trains= new ArrayList<Train>();
 	private static List<Cost> costs = new ArrayList<Cost>();
 	private static List<ReservationInfo> reservations = new ArrayList<ReservationInfo>();
 	private static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+	
+	//--------------------------------------------------------------------------------------------------
 	public ReservationService() {
 		initData();
 	}
 	
 	public List<Train> getPossibleTrainList(GetTrainListDto dto, LocalTime  departureTime){
 		List<Train> possibleTrains = new ArrayList<>();
-		for (Train train: trains) {
+		for (Train train: trains) {//for 00 전체 열차 반복
 			List<StopStation> stopStations =train.getStopStaions();
 			
 			int sameStationIndex  = -1;
 			
-			for(int stopStationIndex = 0; stopStationIndex < stopStations.size(); stopStationIndex++) {
+			for(int stopStationIndex = 0; stopStationIndex < stopStations.size(); stopStationIndex++) {//for 00.01 출발역, 출발시간 확인
 				StopStation stopStation = stopStations.get(stopStationIndex);
 				String stopStationName = stopStations.get(stopStationIndex).getStationName();
 				
 				if(!dto.isEqualDepartureStation(stopStationName)){
 				continue;
 				}
-				
+				if(stopStation.getDepartureTime().equals("")) {
+					continue;
+				}
 			LocalTime stationDepartureTime = LocalTime.parse(stopStation.getDepartureTime(), timeFormatter);
 			
 				if(stationDepartureTime.isBefore(departureTime)) {
@@ -54,36 +57,36 @@ public class ReservationService {
 			sameStationIndex = stopStationIndex;
 			break;
 			
-		}
+		}//for 00.01
 		
 			
 			if(sameStationIndex == -1) {
 				continue;
-				}
+				}//for 00.01 로 알맞은 역을 찾지 못했으면 for 00으로 돌아가서 다음 열차를 확인함
 			
 			boolean isPossible = false;
 			
 			
 			
-			for(int stopStationIndex=0; stopStationIndex <= stopStations.size(); stopStationIndex++) {
+			for(int stopStationIndex=0; stopStationIndex <= stopStations.size(); stopStationIndex++) { // for00. 02 도착역 확인
 				String  stationName = stopStations.get(stopStationIndex).getStationName();
 				
 				if(!dto.isEqualArrivalStation(stationName)) {
 					continue;
 					}
 				
-				if (stopStationIndex <= sameStationIndex) {
+				if (stopStationIndex <= sameStationIndex) {//stopStation 은 same StationIndex 보다 숫자가 커야함. 왜냐하면 도착역의 index는 출발역의 인덱스보다 커야하기 때문에 
 					break;
 					}
 				isPossible =true;
 				break;
-				
-				
-				
-			}
+			
+			} //for 00.02
+		
 			if(!isPossible) {
 				continue;
-				}
+				} // for 00.02 결과로 찾지 못햇으면 다시 for 00 으로 돌아감
+			
 		
 			List<Seat> seats = train.getSeats();
 			
@@ -94,16 +97,19 @@ public class ReservationService {
 					possibleSeatCount++;
 				}
 			}
+			
 			if  (possibleSeatCount < dto.getNumberOfPeople()) {
 				continue;
 				}
+			
 			possibleTrains.add(train);
 			
-	}
+	}//for00
 		return possibleTrains;
 		
 	}
 	
+	//--------------------------------------------------------------------------------------------------
 	
 	public ReservationInfo postReservation(PostReservationDto postResrvationdto,GetTrainListDto getTrainListDto){
 		
@@ -185,7 +191,31 @@ public class ReservationService {
 		reservations.add(reservationInfo);
 		return reservationInfo;
 		
+		
 	}//ReservationInfo
+	//-----------------------------------------------------------------------------------------
+	
+	
+	public ReservationInfo getReservation(GetReservationDto dto) {
+		
+		ReservationInfo reservationInfo = null;
+		String reservationNumber = dto.getReservationNumber();
+		for(ReservationInfo item:reservations) {//for00
+			boolean isEqualReservationNumber = reservationNumber.equals(item.getReservationNumber());
+			
+			if(!isEqualReservationNumber) {
+				continue;
+			}
+			reservationInfo=item;
+			break;
+		}//for00
+		
+		
+		return reservationInfo;
+	}
+	
+	
+	//-------------------------------------------------------------------------------------------
 	
 	
 	
@@ -194,11 +224,7 @@ public class ReservationService {
 	
 	
 	
-	
-	
-	
-	
-	
+	//------------------------------------------------------------------------------------------
 	
 	
 	private static void initData() {
@@ -276,6 +302,7 @@ public class ReservationService {
 			
 			
 		}
+//------------------------------------------------------------------------------------
 	
 }
 
