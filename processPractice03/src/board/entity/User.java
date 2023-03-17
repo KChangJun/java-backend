@@ -1,5 +1,7 @@
 package board.entity;
 
+import board.dto.request.user.SignUpDto;
+
 public class User {
 
 	private String email;
@@ -26,6 +28,19 @@ public class User {
 		this.addressDetail = addressDetail;
 		this.profileImageUrl = profileImageUrl;
 	}
+	
+	public User(SignUpDto dto) {
+		this.email = dto.getEmail();
+		this.password = dto.getPassword();
+		this.nickname = dto.getNickname();
+		this.phoneNumber = dto.getPhoneNumber();
+		this.address = dto.getAddress();
+		this.addressDetail = dto.getAddressDetail();
+	}
+	
+	
+	
+	
 	//------------------------------------------------------------------------------------
 
 	
