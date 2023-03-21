@@ -3,6 +3,7 @@ package board.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import board.dto.request.board.PatchBoardDto;
 import board.entity.Board;
 import board.entity.User;
 
@@ -30,12 +31,12 @@ public class BoardRepository {
 		return board;
 	}
 
-public Board findByBoardNumber(int boardNumber) {
-	Board result = null;
-	for(Board board :boardTable) {
-		if(board.getBoardNumber() == boardNumber) {
-			result = board;
-			break;
+	public Board findByBoardNumber(int boardNumber) {
+		Board result = null;
+		for(Board board :boardTable) {
+			if(board.getBoardNumber() == boardNumber) {
+				result = board;
+				break;
 		}
 	}
 	
@@ -48,5 +49,25 @@ public Board findByBoardNumber(int boardNumber) {
 	}
 	
 	
-	
+//	public boolean findByBoardNumber(PatchBoardDto dto) {
+//		boolean result = false;
+//		for(Board board :boardTable) {
+//			if(board.getBoardNumber()==dto.getBoardNumber() && board.getWriterEmail().equals(dto.getEmail())) {
+//				result = true;
+//			}
+//		}		
+//		return result;
+//	}
+
+	public void deleteByBoardNumber(int boardNumber) {
+		for(int index =0; index <boardTable.size(); index ++) {
+			Board board = boardTable.get(index);
+			if(board.getBoardNumber() == boardNumber) {
+				boardTable.remove(board);
+				break;
+			}
+		}
+	}
+
+
 }

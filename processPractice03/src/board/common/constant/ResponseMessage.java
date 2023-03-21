@@ -10,6 +10,8 @@ public interface ResponseMessage {
 	
 	public static final String NOT_EXIST_BOARD = "Does Not Exist Board";
 	
+	public static final String NOT_PERMISSION = "Do Not Have Permission";
+	
 	public static final String PASSWORD_NOT_MATCH = "Password Not Match";
 
 	public static final String FAIL_SIGN_IN = "Sign in Failed";

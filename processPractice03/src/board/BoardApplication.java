@@ -1,10 +1,18 @@
 package board;
 
+//순서도 3개 (c java javascript)
+// 예외사항 
+
+//객체의 특징 , 객체 5원칙
+// 간단한 스크립트
+
+
 import java.util.Scanner;
 
 import board.common.constant.HttpStatus;
 import board.controller.BoardController;
 import board.controller.UserController;
+import board.dto.request.board.PatchBoardDto;
 import board.dto.request.board.PostBoardDto;
 import board.dto.request.user.SignInDto;
 import board.dto.request.user.SignUpDto;
@@ -85,7 +93,7 @@ public class BoardApplication {
 				postBoardDto.setContent(scanner.nextLine());
 				System.out.print("이미지 :");
 				postBoardDto.setBoardImageUrl(scanner.nextLine());
-				System.out.println("작성자 이메일 :");
+				System.out.print("작성자 이메일 :");
 				postBoardDto.setWriterEmail(scanner.nextLine());
 				
 				boardController.postBoard(postBoardDto);
@@ -127,13 +135,49 @@ public class BoardApplication {
 				
 				//case 05----------------------------------------------
 			case PATCH_BOARD:
+//				patchboard();
+				PatchBoardDto patchBoardDto= new PatchBoardDto();
+				try {
+				System.out.print("게시불 번호: ");
+				String patchBoardNumber = scanner.nextLine();
+				patchBoardDto.setBoardNumber(Integer.parseInt(patchBoardNumber));//parseInt = 인트타입 자료형으로 바꿔줌, 정수형이 들어오지 않았을 경우 에러가 발생할수 있음
+				System.out.print("제목 : ");
+				patchBoardDto.setTitle(scanner.nextLine());
+				System.out.print("내용 :");
+				patchBoardDto.setContent(scanner.nextLine());
+				System.out.print("이미지 :");
+				patchBoardDto.setBoardImageUrl(scanner.nextLine());
+				System.out.print("작성자 이메일 :");
+				patchBoardDto.setEmail(scanner.nextLine());
+				}catch(Exception exceptrion) {
+					exceptrion.printStackTrace();
+					continue;
+				}
 				
+				
+				boardController.patchBoard(patchBoardDto);
+//				
 				break;
 				//case 05--------------------------------------------------
 			
+				
+				
 				//case 06-----------------------------------------------------
 			case DELETE_BOARD:
+				int deleteBoardNumber = 0;
+				String deleteEmail=null;
+				try {
+						System.out.print("게시불 번호: ");
+						deleteBoardNumber = Integer.parseInt(scanner.nextLine());
+						System.out.print("이메일 주소 :");		
+						deleteEmail = scanner.nextLine();
+						
+				} catch(Exception exception) {
+					exception.printStackTrace();
+					continue;
+				}
 				
+				boardController.deleteBoard(deleteBoardNumber, deleteEmail);
 				break;
 				//case06----------------------------------------------
 				
@@ -159,5 +203,34 @@ public class BoardApplication {
 		
 	
 	}
+	
+	
+//	private static void patchboard() {
+//		Scanner scanner = new Scanner(System.in);
+//		PatchBoardDto patchBoardDto= new PatchBoardDto();
+//	try {
+//		
+//	System.out.print("게시불 번호: ");
+//	String patchBoardNumber = scanner.nextLine();
+//	patchBoardDto.setBoardNumber(Integer.parseInt(patchBoardNumber));//parseInt = 인트타입 자료형으로 바꿔줌, 정수형이 들어오지 않았을 경우 에러가 발생할수 있음
+//	System.out.print("제목 : ");
+//	patchBoardDto.setTitle(scanner.nextLine());
+//	System.out.print("내용 :");
+//	patchBoardDto.setContent(scanner.nextLine());
+//	System.out.print("이미지 :");
+//	patchBoardDto.setBoardImageUrl(scanner.nextLine());
+//	System.out.print("작성자 이메일 :");
+//	patchBoardDto.setEmail(scanner.nextLine());
+//	boardController.patchBoard(patchBoardDto);
+//	}catch(Exception exceptrion) {
+//		exceptrion.printStackTrace();
+//	}
+//	
+//	}
+//	
+//	
+//	
+	
+	
 
 }

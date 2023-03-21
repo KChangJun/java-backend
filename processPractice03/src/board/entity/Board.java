@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import board.dto.request.board.PatchBoardDto;
 import board.dto.request.board.PostBoardDto;
 import board.repository.BoardRepository;
 
@@ -153,7 +154,15 @@ public class Board {
 	
 	//--------------------------------------------------
 	
+	public void increaseViewCount() {
+			this.viewCount++;
+	}
 	
+	public void patch(PatchBoardDto dto) {
+		this.title = dto.getTitle();
+		this.content = dto.getContent();
+		this.boardImageUrl = dto.getBoardImageUrl();
+	}
 	
 
 	
