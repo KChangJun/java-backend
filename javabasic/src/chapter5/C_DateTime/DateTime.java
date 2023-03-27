@@ -37,8 +37,9 @@ public class DateTime {
 		// 날짜를 관리 해주는 클래스
 		// 주로 날짜와 관련된 데이터타입을 취급할 때 자주 사용
 		Date date = new Date();
+		System.out.println("-------------------------");
 		System.out.println(date);
-		
+		System.out.println("-------------------------");
 		System.out.println(date.getMonth());
 		date.setHours(10);
 		System.out.println(date);
